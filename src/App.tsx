@@ -1,19 +1,24 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
-import { LoginPage } from "./pages/Login";
-import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
+
+import CustomHistoryRouter from "./routes/CustomHistoryRoutes";
+import AppRoutes from "./routes/Router";
+import { history } from "./services/history";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-      </Routes>
-    </BrowserRouter>
+    <CustomHistoryRouter history={history}>
+      <Layout />
+    </CustomHistoryRouter>
+  );
+}
+
+function Layout() {
+  return (
+    <>
+      <div className="flex flex-col">
+        <AppRoutes />
+      </div>
+    </>
   );
 }
 

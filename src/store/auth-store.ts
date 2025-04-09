@@ -3,6 +3,7 @@ import { devtools } from "zustand/middleware";
 import { instance } from "../services/api-client";
 import { ACCESS_TOKEN, AUTH_REFRESH_TOKEN } from "../constants/cookiesKeys";
 import Cookies from "js-cookie";
+import { isTokenExpired } from "../services/interceptors";
 
 interface LoginParams {
   email: string;
@@ -10,59 +11,109 @@ interface LoginParams {
 }
 
 interface RegisterParams {
-  full_name: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  phone: string;
+  phone_number: string;
   password: string;
   confirm_password: string;
 }
 
 export interface IAuthTokens {
-  access_token: string;
-  refresh_token: string;
+  access: string;
+  refresh: string;
 }
 
 interface IAuthStore {
   isLoading: boolean;
+  isAuthorized: boolean;
+  user: any;
+
   login: (values: LoginParams, onSuccess: () => void) => void;
   logout: () => void;
   register: (values: RegisterParams, onSuccess: () => void) => void;
+  getUser: () => void;
 }
 
 const useAuthStore = create(
   devtools<IAuthStore>((set) => ({
     isLoading: false,
+    isAuthorized: false,
+    user: {
+      id: 0,
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone: "",
+      google_id: undefined,
+      role: undefined,
+      purchase_limit: 0,
+      created_at: "",
+      updated_at: "",
+      avatar: undefined,
+      logo: undefined,
+    },
+
     login: async (values: LoginParams, onSuccess: () => void) => {
       set({ isLoading: true });
-      console.log("Values in store:", values);
+      console.log("Данные для входа:", values);
       try {
         const { data } = await instance.post<IAuthTokens>(
           "auth/login/",
           values
         );
 
-        Cookies.set(ACCESS_TOKEN, data.access_token);
-        Cookies.set(AUTH_REFRESH_TOKEN, data.refresh_token);
+        Cookies.set(ACCESS_TOKEN, data.access); // Исправлено: access вместо access_token
+        Cookies.set(AUTH_REFRESH_TOKEN, data.refresh); // Исправлено: refresh вместо refresh_token
 
-        set({ isLoading: false });
+        set({ isLoading: false, isAuthorized: true }); // Устанавливаем авторизацию
 
         onSuccess();
-      } catch (response) {
-        const errorText = response || "An error occurred";
+      } catch (error) {
+        console.error("Ошибка входа:", error);
         set({ isLoading: false });
-        // alert(errorText);
+        // Здесь можно добавить обработку ошибки, например, показать сообщение пользователю
       }
     },
-    register: (values: RegisterParams, onSuccess: () => void) => {
+    register: async (values: RegisterParams, onSuccess: () => void) => {
       set({ isLoading: true });
-      setTimeout(() => {
-        set({ isLoading: false });
-        onSuccess();
-      }, 1000);
+      try {
+        const { data } = await instance.post("auth/register/", values);
+        console.log("User registered:", data);
+        setTimeout(() => {
+          set({ isLoading: false });
+          onSuccess();
+        }, 1000);
+      } catch (err) {
+        console.log(err);
+      }
     },
     logout: () => {
       // Здесь можно добавить логику очистки состояния, например сброс токена
       console.log("User logged out");
+    },
+    getUser: async () => {
+      set({ isLoading: true });
+      try {
+        const access = Cookies.get(ACCESS_TOKEN);
+        const refresh = Cookies.get(AUTH_REFRESH_TOKEN);
+
+        if (!access || !refresh) {
+          set({ isAuthorized: false, isLoading: false });
+          return;
+        }
+
+        const { data } = await instance.get<any>("/auth/profile/");
+
+        set({
+          user: data,
+          isAuthorized: true,
+          isLoading: false,
+        });
+      } catch (error) {
+        console.error("Ошибка получения пользователя:", error);
+        set({ isAuthorized: false, isLoading: false });
+      }
     },
   }))
 );

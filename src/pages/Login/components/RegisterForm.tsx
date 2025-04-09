@@ -13,28 +13,31 @@ import { ButtonVariants } from "../../../components/ui/Button/types";
 import { Sizes } from "../../../@types/sizes";
 // import { useRegisterMutation } from "../../../stores/api/authApi";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../../store/auth-store";
 
 interface Props {
   setActiveForm: (form: "login" | "register") => void;
 }
 
 export const RegistrationForm: FC<Props> = ({ setActiveForm }) => {
-  // const [register, { isLoading, error }] = useRegisterMutation();
+  const register = useAuthStore((state) => state.register);
 
   const navigate = useNavigate(); // Инициализируем navigate
 
   const formikProps: FormikConfig<IRegisterFormikValues> = {
     initialValues: REGISTER_INITIAL_VALUES,
-    validationSchema: AUTH_FORM_VALIDATION_SCHEMA,
+    // validationSchema: AUTH_FORM_VALIDATION_SCHEMA,
     onSubmit: async (values) => {
       console.log("Values:", values);
       try {
-        // const response = await register(values).unwrap();
-        // console.log("User registered:", response);
+        const response = await register(values, () => {
+          setActiveForm("login");
+        });
+        console.log("User registered:", values);
 
-        formik.resetForm();
+        // formik.resetForm();
 
-        navigate("/login");
+        // navigate("/login");
       } catch (err) {
         console.error("Registration failed:", err);
       }
@@ -65,7 +68,7 @@ export const RegistrationForm: FC<Props> = ({ setActiveForm }) => {
               <div
                 key={field.name}
                 className={
-                  field.name === "email" || field.name === "phone"
+                  field.name === "email" || field.name === "phone_number"
                     ? "col-span-1"
                     : "md:col-span-2"
                 }

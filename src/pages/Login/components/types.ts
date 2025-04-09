@@ -4,9 +4,10 @@ export interface IFormikValues {
 }
 
 export interface IRegisterFormikValues {
-  full_name: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  phone: string;
+  phone_number: string;
   password: string;
   confirm_password: string;
 }

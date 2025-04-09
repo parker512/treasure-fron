@@ -14,9 +14,10 @@ export const AUTH_INITIAL_VALUES: IFormikValues = {
 };
 
 export const REGISTER_INITIAL_VALUES: IRegisterFormikValues = {
-  full_name: "",
+  first_name: "",
+  last_name: "",
   email: "",
-  phone: "",
+  phone_number: "",
   password: "",
   confirm_password: "",
 };
@@ -44,8 +45,16 @@ export const AUTH_FORM_FIELDS: IRenderFormField[] = [
 
 export const REGISTER_FORM_FIELDS: IRenderFormField[] = [
   {
-    name: "full_name",
-    label: "Full Name *",
+    name: "first_name",
+    label: "First Name *",
+    component: TextInput,
+    labelClassName: LABEL_CLASSNAME,
+    placeholder: "Enter your full name",
+    className: TEXT_INPUT_CLASSNAME,
+  },
+  {
+    name: "last_name",
+    label: "Last Name *",
     component: TextInput,
     labelClassName: LABEL_CLASSNAME,
     placeholder: "Enter your full name",
@@ -61,7 +70,7 @@ export const REGISTER_FORM_FIELDS: IRenderFormField[] = [
     className: TEXT_INPUT_CLASSNAME,
   },
   {
-    name: "phone",
+    name: "phone_number",
     label: "Phone Number *",
     component: TextInput,
     labelClassName: LABEL_CLASSNAME,

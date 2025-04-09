@@ -4,45 +4,47 @@ import Cookies from "js-cookie";
 import { ACCESS_TOKEN, AUTH_REFRESH_TOKEN } from "../constants/cookiesKeys";
 import { UNAUTHORIZED_STATUS_CODE_401 } from "../constants/httpStatuses";
 
-//  not secure, client-side use only
 export const isTokenExpired = (token: string) => {
-  // if (!token) return true;
+  if (!token) return true;
 
-  // try {
-  //   const tokenPayloadStr = token.split(".")[1];
-  //   const tokenPayload = JSON.parse(atob(tokenPayloadStr));
-  //   return Math.floor(new Date().getTime() / 1000) > tokenPayload?.exp;
-  // } catch (error) {
-  //   return true;
-  // }
-
-  //temp
-  return false;
+  try {
+    const tokenPayloadStr = token.split(".")[1];
+    const tokenPayload = JSON.parse(atob(tokenPayloadStr));
+    const currentTime = Math.floor(new Date().getTime() / 1000);
+    return currentTime > tokenPayload.exp;
+  } catch (error) {
+    console.error("Ошибка разбора токена:", error);
+    return true;
+  }
 };
 
 export const addAccessToken = (config: InternalAxiosRequestConfig) => {
   const access = Cookies.get(ACCESS_TOKEN);
   const refresh = Cookies.get(AUTH_REFRESH_TOKEN);
 
-  const isRefreshTokenExpired = isTokenExpired(refresh);
+  const isRefreshTokenExpired = refresh ? isTokenExpired(refresh) : true;
 
   if (access && !isRefreshTokenExpired) {
-    config.headers.Authorization = access;
+    config.headers.Authorization = `Bearer ${access}`;
   }
 
   return config;
 };
 
-let accessTokenPromise: Promise<string>;
+// Исправлено: добавляем undefined как возможный тип
+let accessTokenPromise: Promise<string | null> | undefined;
 
 export const updateAccessToken = async (error: AxiosError) => {
-  if (error.response?.status !== UNAUTHORIZED_STATUS_CODE_401) {
+  if (
+    error.response?.status !== UNAUTHORIZED_STATUS_CODE_401 ||
+    !error.config
+  ) {
     return Promise.reject(error);
   }
 
   if (!accessTokenPromise) {
     accessTokenPromise = fetchAccessToken().then((token) => {
-      accessTokenPromise = null;
+      accessTokenPromise = undefined; // Исправлено: сбрасываем в undefined
       return token;
     });
   }
@@ -58,18 +60,23 @@ export const updateAccessToken = async (error: AxiosError) => {
 
 const fetchAccessToken = async () => {
   const refresh = Cookies.get(AUTH_REFRESH_TOKEN);
-  const isRefreshTokenExpired = isTokenExpired(refresh);
+  const isRefreshTokenExpired = refresh ? isTokenExpired(refresh) : true;
 
-  if (!refresh || isRefreshTokenExpired) return null;
+  if (!refresh || isRefreshTokenExpired) {
+    Cookies.remove(ACCESS_TOKEN);
+    Cookies.remove(AUTH_REFRESH_TOKEN);
+    return null;
+  }
 
   try {
     const { data } = await axios.post<{ access: string }>(
-      "/token/refresh/",
+      "http://127.0.0.1:8000/api/refresh/",
       { refresh },
-      { baseURL: "https://app-api.205medical.com/" } //https://app-api.205medical.com/
+      { baseURL: "http://127.0.0.1:8000/api/" }
     );
     return data.access;
   } catch (error) {
+    console.error("Ошибка обновления токена:", error);
     Cookies.remove(ACCESS_TOKEN);
     Cookies.remove(AUTH_REFRESH_TOKEN);
     return null;
