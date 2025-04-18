@@ -9,6 +9,8 @@ import MainPage from "../pages/Home";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import useAuthStore from "../store/auth-store";
+import { ProfilePage } from "../pages/Profile";
+import { CreateBookPage } from "../pages/CreateBook";
 
 const ROUTES = [
   {
@@ -18,6 +20,14 @@ const ROUTES = [
   {
     element: <MainPage />,
     path: PATHNAMES.HOME,
+  },
+  {
+    element: <ProfilePage />,
+    path: PATHNAMES.PROFILE,
+  },
+  {
+    element: <CreateBookPage />,
+    path: PATHNAMES.LISTING_CREATE,
   },
 ];
 
