@@ -12,6 +12,7 @@ import { LISTING_CREATE_FORM_FIELDS } from "./components/constants";
 import useBookStore from "../../store/auth-books";
 import { AvatarUploader } from "../Profile/components/AvatarUploader";
 import useFileStore from "../../store/file-store";
+import { ConditionSelect } from "./components/ConditionSelect";
 
 interface Category {
   id: number;
@@ -30,6 +31,7 @@ interface ICreateBookForm {
   category_id: number | null;
   genre_id: number | null;
   photo: File | null;
+  condition: string | null;
 }
 
 export const CreateBookPage = () => {
@@ -50,7 +52,7 @@ export const CreateBookPage = () => {
 
   const fetchGenres = async () => {
     const { data } = await instance.get<Genre[]>("/books/genres/");
-    console.log("data", data);
+
     setGenres(data);
   };
 
@@ -61,8 +63,6 @@ export const CreateBookPage = () => {
 
   useEffect(() => {
     if (response) {
-      console.log("response", response);
-      console.log("RESponse:", response);
       // formik.setFieldValue("photo", response.id);
       setPhotoId(response.id);
     }
@@ -76,7 +76,9 @@ export const CreateBookPage = () => {
       category_id: null,
       genre_id: null,
       photo: null,
+      condition: null, // ← добавлено
     },
+
     onSubmit: async (values) => {
       setIsSubmitting(true);
       try {
@@ -87,6 +89,7 @@ export const CreateBookPage = () => {
         formData.append("category_id", String(values.category_id));
         formData.append("genre_id", String(values.genre_id));
         formData.append("photo", String(photoId));
+        formData.append("condition", values.condition || "");
 
         await createBook(formData);
 
@@ -101,6 +104,11 @@ export const CreateBookPage = () => {
       }
     },
   });
+
+  const CONDITIONS = [
+    { label: "Нова", value: "new" },
+    { label: "Б/у", value: "used" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-5">
@@ -149,6 +157,13 @@ export const CreateBookPage = () => {
                 options={genres}
                 value={formik.values.genre_id}
                 onChange={(value) => formik.setFieldValue("genre_id", value)}
+              />
+              <ConditionSelect
+                name="condition"
+                label="Стан *"
+                options={CONDITIONS}
+                value={formik.values.condition}
+                onChange={(value) => formik.setFieldValue("condition", value)}
               />
             </div>
             <div>

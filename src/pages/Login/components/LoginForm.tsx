@@ -32,7 +32,6 @@ export const LoginForm: FC<Props> = ({ setActiveForm }) => {
 
   const handleSubmitAsync = async (values: IFormikValues) => {
     try {
-      console.log("Values:", values);
       await login(values, () => {
         navigate("/");
       });

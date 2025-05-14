@@ -11,6 +11,10 @@ import Footer from "../components/Footer";
 import useAuthStore from "../store/auth-store";
 import { ProfilePage } from "../pages/Profile";
 import { CreateBookPage } from "../pages/CreateBook";
+import BookDetail from "../pages/BookDetail";
+import UserListings from "../pages/AllUserListing";
+import { BrowseBooks } from "../pages/AllBooks";
+import { ChatRoom } from "../pages/Chat";
 
 const ROUTES = [
   {
@@ -28,6 +32,22 @@ const ROUTES = [
   {
     element: <CreateBookPage />,
     path: PATHNAMES.LISTING_CREATE,
+  },
+  {
+    element: <BookDetail />,
+    path: PATHNAMES.BOOK_DETAIL,
+  },
+  {
+    element: <UserListings />,
+    path: PATHNAMES.USER_ALL_LISTING,
+  },
+  {
+    element: <BrowseBooks />,
+    path: PATHNAMES.BROWSE_BOOKS,
+  },
+  {
+    element: <ChatRoom />,
+    path: PATHNAMES.CHAT_ROOM,
   },
 ];
 

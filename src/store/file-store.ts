@@ -18,7 +18,7 @@ const useFileStore = create(
 
       try {
         const { data } = await instance.post("media/upload-photo/", formData);
-        console.log("DATAFILE: ", data);
+
         set({ uploadFile: data });
         set({ response: data });
       } catch (error) {

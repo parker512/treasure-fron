@@ -18,6 +18,7 @@
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.484.0",
     "react": "^19.0.0",
+    "react-country-state-city": "^1.1.12",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-input-mask": "^2.0.4",

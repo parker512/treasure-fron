@@ -4,25 +4,16 @@ import { Link } from "react-router-dom";
 import ProductCard from "../../components/ProductCard";
 import useBookStore from "../../store/auth-books";
 
-// Define the type for a book object
-interface Book {
-  id: number;
-  title: string;
-  author: string;
-  price: number;
-  condition: "New" | "Used"; // Explicitly restrict to 'New' or 'Used'
-  image: string;
-}
-
 const MainPage: React.FC = () => {
   const getBooks = useBookStore((state) => state.getBooks);
-  const books = useBookStore((state) => state.books);
+  const bookList = useBookStore((state) => state.books);
+  const books = bookList.results;
+
+  console.log(books);
 
   useEffect(() => {
     getBooks();
   }, [getBooks]);
-
-  console.log("Books: ", books[0]?.photo_detail?.image);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -45,16 +36,21 @@ const MainPage: React.FC = () => {
           Останні книги у вашому регіоні
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {books.map((book) => (
-            <ProductCard
-              key={book.id}
-              title={book.title}
-              author={book.author}
-              price={book.price}
-              condition={book.condition} // Now matches the ProductCardProps type
-              image={book.photo_detail.image}
-            />
-          ))}
+          {books.length > 0 ? (
+            books.map((book) => (
+              <ProductCard
+                key={book.id}
+                id={book.id}
+                title={book.title}
+                author={book.author}
+                price={Number(book.price)}
+                condition={book.condition}
+                image={book?.photo_detail?.image}
+              />
+            ))
+          ) : (
+            <p>Немає книг</p>
+          )}
         </div>
       </section>
     </div>

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { Form, FormikConfig, FormikProvider, useFormik } from "formik";
 import { IRegisterFormikValues } from "./types";
@@ -14,6 +14,9 @@ import { Sizes } from "../../../@types/sizes";
 // import { useRegisterMutation } from "../../../stores/api/authApi";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../../store/auth-store";
+import { GetCity, GetState } from "react-country-state-city";
+import { CustomSelectLocation } from "../../../components/customSelectLocation";
+import { ukraineLocations } from "../../../constants/data";
 
 interface Props {
   setActiveForm: (form: "login" | "register") => void;
@@ -21,6 +24,46 @@ interface Props {
 
 export const RegistrationForm: FC<Props> = ({ setActiveForm }) => {
   const register = useAuthStore((state) => state.register);
+  const [country, setCountry] = useState("230");
+  const [stateList, setStateList] = useState<any>([]);
+  const [cityList, setCitiesList] = useState<any>([]);
+  const [currentCity, setCurrentCity] = useState<{
+    cityId: string | null;
+    cityName: string | undefined;
+  }>({
+    cityId: null,
+    cityName: undefined,
+  });
+
+  const [currentState, setCurrentState] = useState<{
+    stateId: string | null;
+    stateName: string | undefined;
+  }>({
+    stateId: null,
+    stateName: undefined,
+  });
+
+  useEffect(() => {
+    // при загрузке компонента — загружаем список областей
+    const states = ukraineLocations.map((region, index) => ({
+      id: index.toString(), // можешь использовать uuid, если хочешь
+      name: region.name,
+    }));
+    setStateList(states);
+  }, []);
+
+  useEffect(() => {
+    if (currentState.stateId) {
+      const region = ukraineLocations[parseInt(currentState.stateId)];
+      if (region) {
+        const cities = region.cities.map((city, index) => ({
+          id: index.toString(),
+          name: city.name,
+        }));
+        setCitiesList(cities);
+      }
+    }
+  }, [currentState]);
 
   const navigate = useNavigate(); // Инициализируем navigate
 
@@ -28,16 +71,18 @@ export const RegistrationForm: FC<Props> = ({ setActiveForm }) => {
     initialValues: REGISTER_INITIAL_VALUES,
     // validationSchema: AUTH_FORM_VALIDATION_SCHEMA,
     onSubmit: async (values) => {
-      console.log("Values:", values);
       try {
-        const response = await register(values, () => {
+        const fullValues = {
+          ...values,
+          region: currentState.stateName || "",
+          city: currentCity.cityName || "",
+        };
+
+        const response = await register(fullValues, () => {
           setActiveForm("login");
         });
-        console.log("User registered:", values);
 
         // formik.resetForm();
-
-        // navigate("/login");
       } catch (err) {
         console.error("Registration failed:", err);
       }
@@ -76,7 +121,28 @@ export const RegistrationForm: FC<Props> = ({ setActiveForm }) => {
                 <RenderFormFields fields={[field]} />
               </div>
             ))}
+
+            <div>
+              <h6>Область</h6>
+              <CustomSelectLocation
+                locations={stateList}
+                placeholder="Select State"
+                selectedLocation={currentState.stateName}
+                onSelect={setCurrentState}
+              />
+            </div>
+            <div>
+              <h6>Місто</h6>
+              <CustomSelectLocation
+                locations={cityList}
+                placeholder="Select City"
+                selectedLocation={currentCity.cityName}
+                onSelect={setCurrentCity}
+                isState={false}
+              />
+            </div>
           </div>
+
           <Button
             variant={ButtonVariants.SECONDARY}
             size={Sizes.M}

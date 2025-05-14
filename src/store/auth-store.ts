@@ -56,7 +56,7 @@ const useAuthStore = create(
 
     login: async (values: LoginParams, onSuccess: () => void) => {
       set({ isLoading: true });
-      console.log("Данные для входа:", values);
+
       try {
         const { data } = await instance.post<IAuthTokens>(
           "auth/login/",
@@ -79,18 +79,15 @@ const useAuthStore = create(
       set({ isLoading: true });
       try {
         const { data } = await instance.post("auth/register/", values);
-        console.log("User registered:", data);
+
         setTimeout(() => {
           set({ isLoading: false });
           onSuccess();
         }, 1000);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     },
     logout: () => {
       // Здесь можно добавить логику очистки состояния, например сброс токена
-      console.log("User logged out");
     },
     getUser: async () => {
       set({ isLoading: true });
