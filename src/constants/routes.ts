@@ -7,4 +7,5 @@ export const PATHNAMES = {
   USER_ALL_LISTING: "/user/:id/listings",
   BROWSE_BOOKS: "/browse",
   CHAT_ROOM: "/chat/:id",
+  SELLER: "/seller/orders",
 };

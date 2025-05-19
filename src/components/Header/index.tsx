@@ -34,6 +34,14 @@ const Header: React.FC = () => {
           <Link to="/profile" className="hover:text-gray-300">
             Profile
           </Link>
+          {isAuthorized && (
+            <Link
+              to="/seller/orders"
+              className="ml-4 text-gray-900 hover:text-blue-600"
+            >
+              Мои заказы
+            </Link>
+          )}
         </div>
 
         {/* Search Bar and Login/Logout */}
