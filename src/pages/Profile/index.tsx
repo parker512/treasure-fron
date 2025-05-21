@@ -145,6 +145,7 @@ export const ProfilePage = () => {
           </Form>
         </FormikProvider>
       </div>
+      <h2 className="text-2xl font-bold text-gray-800">Мої оголощення</h2>
       <UserBooksTable id={user?.id} />
     </div>
   );

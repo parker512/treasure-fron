@@ -32,7 +32,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <img
         src={`http://127.0.0.1:8000${image}`}
         alt={title}
-        className="w-40  rounded-md mb-4"
+        className="w-full h-40 object-cover rounded-md mb-4"
       />
       <h3 className="text-lg font-semibold">{title}</h3>
       <p className="text-gray-600">by {author}</p>
