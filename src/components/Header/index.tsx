@@ -28,12 +28,16 @@ const Header: React.FC = () => {
           <Link to="/browse" className="hover:text-gray-300">
             Browse Books
           </Link>
-          <Link to="/add-book" className="hover:text-gray-300">
-            Add Book
-          </Link>
-          <Link to="/profile" className="hover:text-gray-300">
-            Profile
-          </Link>
+          {isAuthorized && (
+            <Link to="/add-book" className="hover:text-gray-300">
+              Add Book
+            </Link>
+          )}
+          {isAuthorized && (
+            <Link to="/profile" className="hover:text-gray-300">
+              Profile
+            </Link>
+          )}
           {isAuthorized && (
             <Link
               to="/seller/orders"
