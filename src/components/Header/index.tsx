@@ -9,7 +9,14 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLoginCick = () => {
+    console.log("Login clicked");
     navigate(PATHNAMES.LOGIN);
+  };
+
+  const handleLogoutClick = () => {
+    console.log("Logout clicked");
+    useAuthStore.getState().logout();
+    navigate(PATHNAMES.HOME);
   };
 
   return (
@@ -56,7 +63,9 @@ const Header: React.FC = () => {
             className="p-2 rounded-md text-black w-full md:w-64"
           />
           <button
-            onClick={() => handleLoginCick()}
+            onClick={() => {
+              isAuthorized ? handleLogoutClick() : handleLoginCick();
+            }}
             className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md w-full md:w-auto"
           >
             {isAuthorized ? "Logout" : "Login"}

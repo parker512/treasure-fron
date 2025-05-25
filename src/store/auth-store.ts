@@ -87,7 +87,26 @@ const useAuthStore = create(
       } catch (err) {}
     },
     logout: () => {
-      // Здесь можно добавить логику очистки состояния, например сброс токена
+      Cookies.remove(ACCESS_TOKEN);
+      Cookies.remove(AUTH_REFRESH_TOKEN);
+
+      set({
+        isAuthorized: false,
+        user: {
+          id: 0,
+          first_name: "",
+          last_name: "",
+          email: "",
+          phone: "",
+          google_id: undefined,
+          role: undefined,
+          purchase_limit: 0,
+          created_at: "",
+          updated_at: "",
+          avatar: undefined,
+          logo: undefined,
+        },
+      });
     },
     getUser: async () => {
       set({ isLoading: true });
