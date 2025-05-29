@@ -42,6 +42,7 @@ export const CreateBookPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const uploadFile = useFileStore((state) => state.uploadFile);
   const response = useFileStore((state) => state.response);
+  const resetFileStore = useFileStore((state) => state.reset);
 
   const { createBook } = useBookStore();
 
@@ -96,6 +97,8 @@ export const CreateBookPage = () => {
         alert("Оголошення успішно створено!");
         formik.resetForm();
         setAvatarPreview(null);
+        setPhotoId(null); // Сбрасываем photoId
+        resetFileStore(); // Сбрасываем стор файлов
       } catch (error) {
         console.error(error);
         alert("Помилка створення оголошення");

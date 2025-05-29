@@ -135,7 +135,9 @@ const useBookStore = create(
           "/books/book-listings/all/",
           {
             params: {
-              items_per_page: 6,
+              items_per_page: params.items_per_page
+                ? params.items_per_page
+                : 12,
               ...params,
             },
           }

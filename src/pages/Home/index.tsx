@@ -3,17 +3,25 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../../components/ProductCard";
 import useBookStore from "../../store/auth-books";
+import useAuthStore from "../../store/auth-store";
 
 const MainPage: React.FC = () => {
   const getBooks = useBookStore((state) => state.getBooks);
+  const getUser = useAuthStore((state) => state.getUser);
   const bookList = useBookStore((state) => state.books);
+  const user = useAuthStore((state) => state.user);
   const books = bookList.results;
 
   console.log(books);
 
   useEffect(() => {
-    getBooks();
-  }, [getBooks]);
+    getUser();
+  }, [getUser]);
+
+  useEffect(() => {
+    if (!user.region) return;
+    getBooks({ items_per_page: 6, city: user.region });
+  }, [getBooks, user]);
 
   return (
     <div className="min-h-screen bg-gray-100">

@@ -7,6 +7,7 @@ interface IFileStore {
   response: any;
   uploadDocument: (category: string, file: File) => Promise<void>;
   responseDocument: any;
+  reset: () => void; // Новая функция сброса
 }
 
 const useFileStore = create(
@@ -18,12 +19,9 @@ const useFileStore = create(
 
       try {
         const { data } = await instance.post("media/upload-photo/", formData);
-
-        set({ uploadFile: data });
         set({ response: data });
       } catch (error) {
-        // const errorText = error?.response?.data?.message;
-        // NotificationService.error(errorText);
+        console.error("Ошибка загрузки файла", error);
       }
     },
     responseDocument: null,
@@ -33,13 +31,12 @@ const useFileStore = create(
       formData.append("category", category);
       try {
         const { data } = await instance.post("upload/uploadFile", formData);
-        set({ uploadDocument: data });
         set({ responseDocument: data.result });
       } catch (error) {
-        // const errorText = error?.response?.data?.message;
-        // NotificationService.error(errorText);
+        console.error("Ошибка загрузки документа", error);
       }
     },
+    reset: () => set({ response: null, responseDocument: null }), // Сбрасываем оба состояния
   }))
 );
 

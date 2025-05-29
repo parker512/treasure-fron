@@ -50,7 +50,7 @@ const Header: React.FC = () => {
               to="/seller/orders"
               className="ml-4 text-gray-900 hover:text-blue-600"
             >
-              Мои заказы
+              Мої замовлення
             </Link>
           )}
         </div>
