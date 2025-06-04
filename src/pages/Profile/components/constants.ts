@@ -21,7 +21,7 @@ export interface IFormikValues {
   last_name: string;
   email: string;
   phone: string;
-  birh_date: string;
+  birth_date: string;
   avatar: any;
   region: string;
   city: string;
@@ -53,10 +53,11 @@ export const PROFILE_CREATE_FORM_FIELDS: IRenderFormField[] = [
     fieldClassName: TEXT_INPUT_CLASSNAME,
   },
   {
-    name: "birh_date",
+    name: "birth_date",
     label: "Дата народження *",
     placeholder: "Введіть дату народження",
     component: TextInput,
+    type: "date",
     labelClassName: LABEL_CLASSNAME,
     fieldClassName: TEXT_INPUT_CLASSNAME,
   },

@@ -14,6 +14,7 @@ export const AvatarUploader = ({
   formik,
   uploadFile,
 }: AvatarUploaderProps) => {
+  console.log("AVATAR PREVIEW: ", avatarPreview);
   const onDrop = async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {

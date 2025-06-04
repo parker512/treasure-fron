@@ -86,6 +86,7 @@ export const TextInput: FC<IFormField> = ({
     id: fieldId,
     className: combinedClassNames,
     value: value || "",
+    type,
     placeholder,
     onChange: isTelField ? onChangePhoneValue : onChange,
     onKeyDown: onKeyDownEnter,

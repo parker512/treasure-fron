@@ -12,11 +12,16 @@ import { UserBooksTable } from "./components/userBooksTable";
 export const ProfilePage = () => {
   const getUser = useAuthStore((state) => state.getUser);
   const user = useAuthStore((state) => state.user);
+  const updateUser = useAuthStore((state) => state.updateUser);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const uploadFile = useFileStore((state) => state.uploadFile);
   const [isEditing, setIsEditing] = useState(false);
   const [stateList, setStateList] = useState<any>([]);
   const [cityList, setCitiesList] = useState<any>([]);
+
+  const uploadFile = useFileStore((state) => state.uploadFile);
+  const response = useFileStore((state) => state.response);
+  const resetFileStore = useFileStore((state) => state.reset);
+  const [photoId, setPhotoId] = useState<number | null>(null);
 
   const [currentState, setCurrentState] = useState<{
     stateId: string | null;
@@ -37,14 +42,21 @@ export const ProfilePage = () => {
     getUser();
   }, [getUser]);
 
+  useEffect(() => {
+    if (response) {
+      // formik.setFieldValue("photo", response.id);
+      setPhotoId(response.id);
+    }
+  }, [response]);
+
   const formikProps: FormikConfig<IFormikValues> = {
     initialValues: {
       first_name: "",
       last_name: "",
       email: "",
       phone: "",
-      birh_date: "",
-      avatar: undefined,
+      birth_date: "",
+      avatar: null,
       region: "",
       city: "",
     },
@@ -55,7 +67,18 @@ export const ProfilePage = () => {
 
   const formik = useFormik(formikProps);
 
-  const handleSubmit = (values: IFormikValues) => {};
+  const handleSubmit = (values: IFormikValues) => {
+    const updatedValues = {
+      ...values,
+      avatar: photoId,
+    };
+    updateUser(updatedValues, () => {
+      setIsEditing(false);
+    });
+
+    setPhotoId(null);
+    resetFileStore();
+  };
 
   const handleCancel = () => {
     formik.setValues({
@@ -63,8 +86,8 @@ export const ProfilePage = () => {
       last_name: user.last_name,
       email: user.email,
       phone: user.phone,
-      birh_date: user.birh_date,
-      avatar: undefined,
+      birth_date: user.birth_date,
+      avatar: null,
       region: user.region,
       city: user.city,
     });
@@ -78,9 +101,9 @@ export const ProfilePage = () => {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
-        phone: user.phone,
-        birh_date: user.birh_date,
-        avatar: undefined,
+        phone: user.phone_number,
+        birth_date: user.birth_date,
+        avatar: null,
         region: user.region,
         city: user.city,
       });
@@ -99,7 +122,9 @@ export const ProfilePage = () => {
         cityName: user.city,
       });
 
-      setAvatarPreview(user.avatar);
+      setAvatarPreview(
+        user.avatar?.image ? `http://127.0.0.1:8000/${user.avatar.image}` : null
+      );
     }
   }, [user, stateList]);
 
@@ -111,6 +136,16 @@ export const ProfilePage = () => {
     }));
     setStateList(states);
   }, []);
+
+  useEffect(() => {
+    if (!currentState.stateName) return;
+    currentCity.cityName = undefined;
+    // при загрузке компонента — загружаем список областей
+    const cities = ukraineLocations.find(
+      (region) => region.name === currentState.stateName
+    )?.cities;
+    setCitiesList(cities);
+  }, [currentState]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-5">

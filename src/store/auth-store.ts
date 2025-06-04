@@ -33,6 +33,7 @@ interface IAuthStore {
   logout: () => void;
   register: (values: RegisterParams, onSuccess: () => void) => void;
   getUser: () => void;
+  updateUser: (values: any, onSuccess: () => void) => void;
 }
 
 const useAuthStore = create(
@@ -129,6 +130,24 @@ const useAuthStore = create(
       } catch (error) {
         console.error("Ошибка получения пользователя:", error);
         set({ isAuthorized: false, isLoading: false });
+      }
+    },
+
+    updateUser: async (updatedFields: any, onSuccess?: () => void) => {
+      set({ isLoading: true });
+
+      try {
+        const { data } = await instance.patch("/auth/profile/", updatedFields);
+
+        set({
+          user: data,
+          isLoading: false,
+        });
+
+        onSuccess?.();
+      } catch (error) {
+        console.error("Ошибка обновления профиля:", error);
+        set({ isLoading: false });
       }
     },
   }))
