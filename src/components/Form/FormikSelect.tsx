@@ -34,7 +34,7 @@ export const SelectInput: FC<ISelectInputProps> = ({
   error,
   ...props
 }) => {
-  const [field, meta] = useField(props.name); // Подключаем Formik
+  const [field, meta] = useField(props.name);
   const fieldId = id || props.name;
 
   const combinedClassNames = cn(
@@ -43,7 +43,6 @@ export const SelectInput: FC<ISelectInputProps> = ({
     className
   );
 
-  // Используем значения и обработчики из Formik
   const hasError = meta.touched && meta.error;
 
   return (
@@ -53,15 +52,14 @@ export const SelectInput: FC<ISelectInputProps> = ({
       variant={variant}
       label={label}
       labelFor={fieldId}
-      // isShownError={isShownError ?? hasError} // Показываем ошибку, если есть
-      error={error || meta.error} // Используем ошибку из Formik, если она есть
+      error={error || meta.error}
     >
       <select
         id={fieldId}
         className={combinedClassNames}
-        value={field.value || ""} // Значение из Formik
-        onChange={field.onChange} // Обработчик из Formik
-        onBlur={field.onBlur} // Для отслеживания touched
+        value={field.value || ""}
+        onChange={field.onChange}
+        onBlur={field.onBlur}
         disabled={disabled}
         {...props}
       >

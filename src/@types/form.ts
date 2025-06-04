@@ -23,12 +23,11 @@ export interface IFormField {
   disabled?: boolean;
   options?: IOptionSelect[];
 
-  // Добавляем недостающие свойства
-  rows?: number; // Количество строк для textarea
-  maxLength?: number; // Максимальная длина
-  minLength?: number; // Минимальная длина
-  required?: boolean; // Обязательное поле
-  autoComplete?: string; // Автозаполнение
+  rows?: number;
+  maxLength?: number;
+  minLength?: number;
+  required?: boolean;
+  autoComplete?: string;
 }
 
 export interface IRenderFormField extends IFormField {

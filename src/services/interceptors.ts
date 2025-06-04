@@ -31,7 +31,6 @@ export const addAccessToken = (config: InternalAxiosRequestConfig) => {
   return config;
 };
 
-// Исправлено: добавляем undefined как возможный тип
 let accessTokenPromise: Promise<string | null> | undefined;
 
 export const updateAccessToken = async (error: AxiosError) => {
@@ -44,7 +43,7 @@ export const updateAccessToken = async (error: AxiosError) => {
 
   if (!accessTokenPromise) {
     accessTokenPromise = fetchAccessToken().then((token) => {
-      accessTokenPromise = undefined; // Исправлено: сбрасываем в undefined
+      accessTokenPromise = undefined;
       return token;
     });
   }

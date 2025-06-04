@@ -64,16 +64,15 @@ const useAuthStore = create(
           values
         );
 
-        Cookies.set(ACCESS_TOKEN, data.access); // Исправлено: access вместо access_token
-        Cookies.set(AUTH_REFRESH_TOKEN, data.refresh); // Исправлено: refresh вместо refresh_token
+        Cookies.set(ACCESS_TOKEN, data.access);
+        Cookies.set(AUTH_REFRESH_TOKEN, data.refresh);
 
-        set({ isLoading: false, isAuthorized: true }); // Устанавливаем авторизацию
+        set({ isLoading: false, isAuthorized: true });
 
         onSuccess();
       } catch (error) {
         console.error("Ошибка входа:", error);
         set({ isLoading: false });
-        // Здесь можно добавить обработку ошибки, например, показать сообщение пользователю
       }
     },
     register: async (values: RegisterParams, onSuccess: () => void) => {

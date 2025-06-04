@@ -7,7 +7,7 @@ interface IFileStore {
   response: any;
   uploadDocument: (category: string, file: File) => Promise<void>;
   responseDocument: any;
-  reset: () => void; // Новая функция сброса
+  reset: () => void;
 }
 
 const useFileStore = create(
@@ -36,7 +36,7 @@ const useFileStore = create(
         console.error("Ошибка загрузки документа", error);
       }
     },
-    reset: () => set({ response: null, responseDocument: null }), // Сбрасываем оба состояния
+    reset: () => set({ response: null, responseDocument: null }),
   }))
 );
 

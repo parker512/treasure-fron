@@ -18,8 +18,8 @@ export const getKeyValue = (
 
   if (isImageValue(value)) {
     const borderClass = value.boost
-      ? "border-[#DEE883] border-[5px]" // зелёная рамка
-      : "border-none"; // обычная рамка
+      ? "border-[#DEE883] border-[5px]"
+      : "border-none";
 
     return (
       <div className="h-20 w-20">

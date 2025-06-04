@@ -77,7 +77,7 @@ export const CreateBookPage = () => {
       category_id: null,
       genre_id: null,
       photo: null,
-      condition: null, // ← добавлено
+      condition: null,
     },
 
     onSubmit: async (values) => {
@@ -97,8 +97,8 @@ export const CreateBookPage = () => {
         alert("Оголошення успішно створено!");
         formik.resetForm();
         setAvatarPreview(null);
-        setPhotoId(null); // Сбрасываем photoId
-        resetFileStore(); // Сбрасываем стор файлов
+        setPhotoId(null);
+        resetFileStore();
       } catch (error) {
         console.error(error);
         alert("Помилка створення оголошення");
@@ -182,7 +182,6 @@ export const CreateBookPage = () => {
               />
             </div>
 
-            {/* Кнопка */}
             <div className="flex justify-end mt-6">
               <Button
                 type="submit"

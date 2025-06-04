@@ -108,7 +108,6 @@ export const ProfilePage = () => {
         city: user.city,
       });
 
-      // Находим нужную область по названию
       const matchedRegion = stateList.find((r: any) => r.name === user.region);
 
       setCurrentState({
@@ -116,7 +115,6 @@ export const ProfilePage = () => {
         stateName: matchedRegion?.name ?? user.region,
       });
 
-      // Городов у тебя пока нет в списке (cityList), так что просто устанавливаем как есть
       setCurrentCity({
         cityId: null,
         cityName: user.city,
@@ -129,9 +127,8 @@ export const ProfilePage = () => {
   }, [user, stateList]);
 
   useEffect(() => {
-    // при загрузке компонента — загружаем список областей
     const states = ukraineLocations.map((region, index) => ({
-      id: index.toString(), // можешь использовать uuid, если хочешь
+      id: index.toString(),
       name: region.name,
     }));
     setStateList(states);
@@ -140,7 +137,7 @@ export const ProfilePage = () => {
   useEffect(() => {
     if (!currentState.stateName) return;
     currentCity.cityName = undefined;
-    // при загрузке компонента — загружаем список областей
+
     const cities = ukraineLocations.find(
       (region) => region.name === currentState.stateName
     )?.cities;

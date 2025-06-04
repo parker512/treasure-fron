@@ -2,10 +2,10 @@ import React, { FC, useState, KeyboardEvent } from "react";
 import { useField, useFormikContext } from "formik";
 import cn from "classnames";
 
-import { FormField } from "."; // Импортируем FormField
-import { Eye, EyeOff } from "lucide-react"; // Иконки для глазика
+import { FormField } from ".";
+import { Eye, EyeOff } from "lucide-react";
 
-import { TEXT_INPUT_STYLE_VARIANTS } from "./constants"; // Используем стили
+import { TEXT_INPUT_STYLE_VARIANTS } from "./constants";
 import { FormFieldVariants } from "./types";
 import { IFormField } from "../../@types/form";
 
@@ -34,10 +34,10 @@ export const PasswordInput: FC<IFormField> = ({
 
   const combinedClassNames = cn(
     "w-full outline-none",
-    TEXT_INPUT_STYLE_VARIANTS[variant], // Применяем стили из TEXT_INPUT_STYLE_VARIANTS
+    TEXT_INPUT_STYLE_VARIANTS[variant],
     className,
     {
-      "!border-red-base": error, // Ошибки выделяются красным
+      "!border-red-base": error,
     }
   );
 

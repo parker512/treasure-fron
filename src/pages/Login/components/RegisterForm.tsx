@@ -44,9 +44,8 @@ export const RegistrationForm: FC<Props> = ({ setActiveForm }) => {
   });
 
   useEffect(() => {
-    // при загрузке компонента — загружаем список областей
     const states = ukraineLocations.map((region, index) => ({
-      id: index.toString(), // можешь использовать uuid, если хочешь
+      id: index.toString(),
       name: region.name,
     }));
     setStateList(states);
@@ -65,11 +64,11 @@ export const RegistrationForm: FC<Props> = ({ setActiveForm }) => {
     }
   }, [currentState]);
 
-  const navigate = useNavigate(); // Инициализируем navigate
+  const navigate = useNavigate();
 
   const formikProps: FormikConfig<IRegisterFormikValues> = {
     initialValues: REGISTER_INITIAL_VALUES,
-    // validationSchema: AUTH_FORM_VALIDATION_SCHEMA,
+
     onSubmit: async (values) => {
       try {
         const fullValues = {
@@ -81,8 +80,6 @@ export const RegistrationForm: FC<Props> = ({ setActiveForm }) => {
         const response = await register(fullValues, () => {
           setActiveForm("login");
         });
-
-        // formik.resetForm();
       } catch (err) {
         console.error("Registration failed:", err);
       }
@@ -96,7 +93,7 @@ export const RegistrationForm: FC<Props> = ({ setActiveForm }) => {
       <h1 className="font-manrope font-semibold text-3xl leading-[130%] tracking-normal">
         Welcome!
       </h1>
-      {/* <AuthGoogleButton /> */}
+
       <div className="relative w-[400px] lg:w-[500px] flex items-center">
         <div
           className="w-full border-t-3 border-dashed border-gray-400"

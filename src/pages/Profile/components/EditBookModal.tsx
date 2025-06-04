@@ -112,7 +112,7 @@ export const EditBookModal: FC<Props> = ({ bookId, isOpen, onClose }) => {
         formData.append("condition", values.condition || "");
 
         await updateBook(bookId, formData);
-        await getDetailBook(String(bookId)); // 🔁 получить свежие данные после обновления
+        await getDetailBook(String(bookId));
       } catch (error) {
         console.error(error);
         alert("Помилка редагування оголошення");

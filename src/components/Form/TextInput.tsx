@@ -98,7 +98,7 @@ export const TextInput: FC<IFormField> = ({
     ...field,
     ...props,
     ...textareaProps,
-    ...(mask && { mask }), // передаем маску только для MaskedInput
+    ...(mask && { mask }),
   };
 
   return (

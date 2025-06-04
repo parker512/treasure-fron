@@ -1,36 +1,31 @@
-// Категория книги
 interface BookCategory {
   id: number;
   name: string;
 }
 
-// Жанр книги
 interface BookGenre {
   id: number;
   name: string;
 }
 
-// Фото книги
 interface BookPhoto {
   id: number;
-  image: string; // путь к изображению
+  image: string;
 }
 
-// Объявление книги
 export interface BookListing {
   id: number;
   title: string;
   description: string;
-  price: string; // можно преобразовать в number, если нужно
+  price: string;
   created_at: string;
   location: string | null;
-  user: number; // ID пользователя
+  user: number;
   category: BookCategory;
   genre: BookGenre;
   photo_detail: BookPhoto;
 }
 
-// Пользователь
 export interface UserProfile {
   id: number;
   first_name: string;
@@ -42,7 +37,6 @@ export interface UserProfile {
   region: string | null;
 }
 
-// Общий интерфейс ответа
 export interface UserBooksListing {
   user: UserProfile;
   listings: BookListing[];

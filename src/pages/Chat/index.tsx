@@ -24,7 +24,6 @@ export const ChatRoom = () => {
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Автоскроллинг до последнего сообщения
   useEffect(() => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
