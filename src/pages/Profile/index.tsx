@@ -71,6 +71,9 @@ export const ProfilePage = () => {
     const updatedValues = {
       ...values,
       avatar: photoId,
+      phone_number: values.phone,
+      region: currentState.stateName,
+      city: currentCity.cityName,
     };
     updateUser(updatedValues, () => {
       setIsEditing(false);

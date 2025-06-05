@@ -69,7 +69,9 @@ export default function Orders() {
     if (transactions.length === 0) {
       return (
         <p className="text-gray-600 text-lg">
-          {isSeller ? "У вас пока нет заказов." : "У вас пока нет покупок."}
+          {isSeller
+            ? "У вас поки немає замовлень."
+            : "У вас поки немає продаж."}
         </p>
       );
     }

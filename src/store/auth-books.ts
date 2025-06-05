@@ -106,6 +106,8 @@ interface IBookStore {
   openDispute: (transactionId: number) => Promise<void>;
   getSellerTransactions: () => Promise<void>;
   getBuyerTransactions: () => Promise<void>;
+  // в useBookStore
+  clearBooks: () => void;
 }
 
 const useBookStore = create(
@@ -148,6 +150,9 @@ const useBookStore = create(
         set({ isLoading: false });
       }
     },
+    // в useBookStore
+    clearBooks: () =>
+      set({ books: { count: 0, next: false, previous: false, results: [] } }),
     getDetailBook: async (id: string) => {
       set({ isLoading: true });
       try {

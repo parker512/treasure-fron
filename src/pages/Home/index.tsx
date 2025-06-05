@@ -10,9 +10,15 @@ const MainPage: React.FC = () => {
   const getUser = useAuthStore((state) => state.getUser);
   const bookList = useBookStore((state) => state.books);
   const user = useAuthStore((state) => state.user);
+  const clearBooks = useBookStore((state) => state.clearBooks);
   const books = bookList.results;
 
   console.log(books);
+  useEffect(() => {
+    return () => {
+      clearBooks();
+    };
+  }, []);
 
   useEffect(() => {
     getUser();
@@ -20,6 +26,7 @@ const MainPage: React.FC = () => {
 
   useEffect(() => {
     if (!user.region) return;
+    clearBooks();
     getBooks({ items_per_page: 6, city: user.region });
   }, [getBooks, user]);
 

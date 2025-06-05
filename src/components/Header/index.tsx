@@ -30,26 +30,23 @@ const Header: React.FC = () => {
         {/* Navigation Links */}
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6">
           <Link to="/" className="hover:text-gray-300">
-            Home
+            Головна
           </Link>
           <Link to="/browse" className="hover:text-gray-300">
-            Browse Books
+            Книги
           </Link>
           {isAuthorized && (
             <Link to="/add-book" className="hover:text-gray-300">
-              Add Book
+              Додати книгу
             </Link>
           )}
           {isAuthorized && (
             <Link to="/profile" className="hover:text-gray-300">
-              Profile
+              Мій профіль
             </Link>
           )}
           {isAuthorized && (
-            <Link
-              to="/seller/orders"
-              className="ml-4 text-gray-900 hover:text-blue-600"
-            >
+            <Link to="/seller/orders" className="ml-4 text-gray-300">
               Мої замовлення
             </Link>
           )}
@@ -57,11 +54,6 @@ const Header: React.FC = () => {
 
         {/* Search Bar and Login/Logout */}
         <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 mt-2 md:mt-0">
-          <input
-            type="text"
-            placeholder="Search books..."
-            className="p-2 rounded-md text-black w-full md:w-64"
-          />
           <button
             onClick={() => {
               isAuthorized ? handleLogoutClick() : handleLoginCick();

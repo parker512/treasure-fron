@@ -311,7 +311,7 @@ export const BrowseBooks = () => {
               />
             ))
           ) : (
-            <p>Нет жанров</p>
+            <p>Немає жанрів</p>
           )}
           {genres.length > 5 && (
             <button
@@ -333,7 +333,7 @@ export const BrowseBooks = () => {
               />
             ))
           ) : (
-            <p>Нет жанров</p>
+            <p>Немає жанрів</p>
           )}
         </div>
       </div>
