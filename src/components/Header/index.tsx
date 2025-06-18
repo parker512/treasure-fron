@@ -50,6 +50,11 @@ const Header: React.FC = () => {
               Мої замовлення
             </Link>
           )}
+          {isAuthorized && (
+            <Link to="/favorites" className="ml-4 text-gray-300">
+              Обрані
+            </Link>
+          )}
         </div>
 
         {/* Search Bar and Login/Logout */}

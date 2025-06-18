@@ -61,6 +61,7 @@ const MainPage: React.FC = () => {
                 price={Number(book.price)}
                 condition={book.condition}
                 image={book?.photo_detail?.image}
+                is_favorited={book.is_favorited}
               />
             ))
           ) : (

@@ -1,4 +1,3 @@
-// components/BookDetail.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Button } from "../../components/ui/Button";
@@ -9,6 +8,7 @@ import { useChatStore } from "../../store/chat-store";
 import { instance } from "../../services/api-client";
 import { toast } from "react-toastify";
 import useBookStore from "../../store/auth-books";
+import { HeartIcon } from "lucide-react";
 
 export default function BookDetail() {
   const navigate = useNavigate();
@@ -25,6 +25,8 @@ export default function BookDetail() {
     confirmSellerShipment,
     confirmBuyerReceipt,
     openDispute,
+    addToFavorites,
+    removeFromFavorites,
     isLoading,
   } = useBookStore();
   const { user, isAuthorized } = useAuthStore();
@@ -127,6 +129,27 @@ export default function BookDetail() {
     }
   };
 
+  const handleToggleFavorite = async () => {
+    if (!isAuthorized) {
+      navigate("/login");
+      return;
+    }
+    if (!id) return;
+    try {
+      if (book?.is_favorited) {
+        await removeFromFavorites(parseInt(id));
+        toast.success("Книга удалена из избранного!");
+      } else {
+        await addToFavorites(parseInt(id));
+        toast.success("Книга добавлена в избранное!");
+      }
+      getDetailBook(id); // Обновляем данные книги для актуального is_favorited
+    } catch (error) {
+      toast.error("Ошибка при изменении избранного");
+      console.error("Ошибка:", error);
+    }
+  };
+
   const renderTransactionStatus = () => {
     if (!book?.transactions || book.transactions.length === 0) return null;
 
@@ -215,9 +238,23 @@ export default function BookDetail() {
         {/* Book Details */}
         <div className="lg:w-2/3 flex flex-col gap-8">
           <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
-              {book?.title || "Без назви"}
-            </h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-4xl font-extrabold text-gray-900">
+                {book?.title || "Без назви"}
+              </h2>
+              <button
+                onClick={handleToggleFavorite}
+                className={`flex items-center ${
+                  book?.is_favorited ? "text-red-500" : "text-gray-500"
+                } hover:text-red-700 transition-colors`}
+                disabled={isLoading || !isAuthorized}
+              >
+                <HeartIcon className="w-6 h-6 mr-2" />
+                {book?.is_favorited
+                  ? "Видалити з обраного"
+                  : "Додати до обраного"}
+              </button>
+            </div>
             <div className="space-y-4 text-gray-600 text-lg">
               <p>
                 <span className="font-semibold text-gray-800">Обкладинка:</span>{" "}
@@ -229,7 +266,11 @@ export default function BookDetail() {
               </p>
               <p>
                 <span className="font-semibold text-gray-800">Стан:</span>{" "}
-                {book?.condition || "Н/Д"}
+                {book?.condition === "New"
+                  ? "Новое"
+                  : book?.condition === "Used"
+                  ? "Б/У"
+                  : "Н/Д"}
               </p>
               <p>
                 <span className="font-semibold text-gray-800">Опис:</span>{" "}

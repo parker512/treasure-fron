@@ -16,6 +16,7 @@ import UserListings from "../pages/AllUserListing";
 import { BrowseBooks } from "../pages/AllBooks";
 import { ChatRoom } from "../pages/Chat";
 import SellerOrders from "../pages/SellerOrders";
+import { FavoritesPage } from "../pages/Favorites";
 
 const ROUTES = [
   {
@@ -53,6 +54,10 @@ const ROUTES = [
   {
     element: <SellerOrders />,
     path: PATHNAMES.SELLER,
+  },
+  {
+    element: <FavoritesPage />,
+    path: PATHNAMES.FAVORITES,
   },
 ];
 

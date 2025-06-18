@@ -8,4 +8,5 @@ export const PATHNAMES = {
   BROWSE_BOOKS: "/browse",
   CHAT_ROOM: "/chat/:id",
   SELLER: "/seller/orders",
+  FAVORITES: "/favorites",
 };

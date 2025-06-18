@@ -9,6 +9,22 @@ enum BookCondition {
   USED = "Used",
 }
 
+export interface Favorite {
+  id: number;
+  user: {
+    id: number;
+    email: string;
+    first_name: string;
+    last_name: string;
+    birth_date: string;
+    region: string;
+    city: string;
+    phone_number: string;
+  };
+  book_listing: Book;
+  created_at: string;
+}
+
 export interface Transaction {
   id: number;
   book: {
@@ -76,6 +92,7 @@ interface Book {
   };
   is_sold: boolean;
   transactions: Transaction[];
+  is_favorited: boolean;
 }
 
 interface BookList {
@@ -92,6 +109,7 @@ interface IBookStore {
   userBooksListing: UserBooksListing;
   sellerTransactions: Transaction[];
   buyerTransactions: Transaction[];
+  favorites: Favorite[];
   getBooks: (params?: any) => Promise<void>;
   createBook: (bookData: FormData) => Promise<void>;
   getDetailBook: (id: string) => Promise<void>;
@@ -107,6 +125,9 @@ interface IBookStore {
   getSellerTransactions: () => Promise<void>;
   getBuyerTransactions: () => Promise<void>;
   // в useBookStore
+  getFavorites: () => Promise<void>; // Новый метод
+  addToFavorites: (bookId: number) => Promise<void>; // Новый метод
+  removeFromFavorites: (bookId: number) => Promise<void>; // Новый метод
   clearBooks: () => void;
 }
 
@@ -130,6 +151,7 @@ const useBookStore = create(
     },
     sellerTransactions: [],
     buyerTransactions: [],
+    favorites: [],
     getBooks: async (params?: any) => {
       set({ isLoading: true });
       try {
@@ -294,6 +316,38 @@ const useBookStore = create(
         set({ buyerTransactions: data, isLoading: false });
       } catch (error) {
         console.error("Ошибка получения транзакций покупателя:", error);
+        set({ isLoading: false });
+      }
+    },
+    getFavorites: async () => {
+      set({ isLoading: true });
+      try {
+        const { data } = await instance.get<Favorite[]>("/books/favorites/");
+        set({ favorites: data, isLoading: false });
+      } catch (error) {
+        console.error("Ошибка получения избранных книг:", error);
+        set({ isLoading: false });
+      }
+    },
+    addToFavorites: async (bookId: number) => {
+      set({ isLoading: true });
+      try {
+        await instance.post("/books/favorites/", { book_listing_id: bookId });
+        await useBookStore.getState().getFavorites(); // Обновляем список избранных
+      } catch (error) {
+        console.error("Ошибка добавления в избранное:", error);
+      } finally {
+        set({ isLoading: false });
+      }
+    },
+    removeFromFavorites: async (bookId: number) => {
+      set({ isLoading: true });
+      try {
+        await instance.delete(`/books/favorites/${bookId}/`);
+        await useBookStore.getState().getFavorites(); // Обновляем список избранных
+      } catch (error) {
+        console.error("Ошибка удаления из избранного:", error);
+      } finally {
         set({ isLoading: false });
       }
     },

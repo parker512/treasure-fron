@@ -361,6 +361,7 @@ export const BrowseBooks = () => {
                 price={Number(book.price)}
                 condition={book.condition}
                 image={book?.photo_detail?.image}
+                is_favorited={book.is_favorited}
               />
             ))
           ) : (
